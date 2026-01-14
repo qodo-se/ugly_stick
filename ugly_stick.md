@@ -26,12 +26,12 @@ OPERATION STRATEGY:
    - Prioritize files with substantial code content
    - Skip: test files, configuration files, build scripts, documentation
 
-3. **Issue Insertion Strategy**:
+2. **Issue Insertion Strategy**:
    - Identify existing code patterns that can be made problematic
    - Mix obvious issues with subtle problems
    - Maintain basic functionality while introducing realistic problems
 
-4. **Reporting**:
+3. **Reporting**:
    - Generate a detailed report of all issues introduced
    - Include file locations, issue types, and severity levels
    - Create a "review guide" for code reviewers to identify problems
