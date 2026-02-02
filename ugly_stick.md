@@ -8,13 +8,12 @@ Transform existing clean code by introducing realistic issues that developers co
 TYPES OF CODE ISSUES TO INTRODUCE:
 
 Make sure all of the following types of issues are included.
-1. Duplicate functionality from another place in the code
-2. Hardcoded secret
-3. Another type of common security risk (such as sql injection, cross site scripting, etc.)
-4. Performance issue (such as inefficient loop or memory leak)
-5. Logic bug
-6. Sensitive data included in logging (e.g. PII)
-7. Race condition
+1. Hardcoded secret
+2. Another type of common security risk (such as sql injection, cross site scripting, etc.)
+3. Performance issue (such as inefficient loop or memory leak)
+4. Logic bug
+5. Sensitive data included in logging (e.g. PII)
+6. Race condition
 
 
 OPERATION STRATEGY:
