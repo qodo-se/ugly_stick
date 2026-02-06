@@ -44,18 +44,17 @@ Analyze this directory and return your JSON output."
 Wait for Scout to return. If fewer than 3 suitable files found, ask user if they want to continue.
 
 **Step 3 — Assign Files to Agents:**
-After receiving the Scout's output, assign specific files to each agent to **prevent parallel editing conflicts**. Each agent gets its own set of files — no two agents should edit the same file.
+After receiving the Scout's output, assign specific files to each agent to **prevent parallel editing conflicts**. Each agent gets exclusive file ownership — **no two agents may edit the same file**.
 
-Use the Scout's `file_dependencies` data to assign connected file pairs to the Refactoring Breaker.
+Use each file's `agent_suitability` ratings from the Scout to make informed assignments. The goal is to give each agent the files where it can introduce the most realistic issues.
 
-Example assignment (adapt to actual file count):
-- Security Saboteur: files 1-2
-- Performance Degrader: files 3-4
-- Logic Corruptor: files 5-6
-- Privacy Violator: files 1, 3 (can ADD logging lines to files other agents edit, since logging additions don't conflict with other edit types — but only if there aren't enough files for full separation)
-- Refactoring Breaker: a pair of files with import/call dependencies from the Scout's analysis
+Assignment process:
 
-If the Scout found 5 or fewer files, some overlap is acceptable — but assign agents to different REGIONS of shared files (different functions/sections) to minimize conflict.
+1. **Refactoring Breaker first**: assign it a pair of files with a dependency relationship (from `file_dependencies`), since it has the most constrained requirements (needs connected files).
+2. **Remaining agents by suitability**: for each remaining agent, assign 1-2 files where it has the highest suitability rating, excluding files already assigned. Prefer "high" matches. If an agent has no "high" matches among unassigned files, "medium" is acceptable.
+3. **Verify exclusivity**: confirm no file appears in more than one agent's assignment.
+
+If the Scout found fewer than 7 files: some agents may receive only 1 file. This is acceptable — agents only need 1-2 issues total, which can fit in a single file.
 
 ---
 
@@ -239,6 +238,13 @@ Return this JSON structure (and nothing else outside the JSON):
       "language": "python",
       "primary_purpose": "Handles user authentication and session management",
       "key_functions": ["login", "validate_token", "create_session"],
+      "agent_suitability": {
+        "security_saboteur": "high — loads config with credentials, establishes DB connection",
+        "performance_degrader": "low — no loops or heavy data processing",
+        "logic_corruptor": "medium — has boundary checks in token validation",
+        "privacy_violator": "high — handles user objects with email, password fields",
+        "refactoring_breaker": "high — exports functions used by 3 other files"
+      },
       "imports_from": ["absolute/path/to/other_file.ext"],
       "imported_by": ["absolute/path/to/consumer_file.ext"]
     }
